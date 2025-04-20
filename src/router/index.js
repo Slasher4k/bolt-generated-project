@@ -24,15 +24,20 @@ import { createRouter, createWebHistory } from 'vue-router';
 
     // Navigation guard to protect routes
     router.beforeEach(async (to, from, next) => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (to.matched.some(record => record.meta.requiresAuth)) {
-        if (!user) {
-          next({ name: 'Login' });
+      const environment = import.meta.env.VITE_ENVIRONMENT;
+      if (environment === 'development') {
+        next(); // Allow access in development
+      } else {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (to.matched.some(record => record.meta.requiresAuth)) {
+          if (!user) {
+            next({ name: 'Login' });
+          } else {
+            next();
+          }
         } else {
           next();
         }
-      } else {
-        next();
       }
     });
 
