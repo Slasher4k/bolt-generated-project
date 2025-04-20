@@ -1,1 +1,1 @@
-# bolt-generated-project
+# aws-prac-exam
